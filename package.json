@@ -1,0 +1,27 @@
+{
+  "name": "das-router",
+  "version": "0.0.0",
+  "description": "a router",
+  "main": "router.js",
+  "scripts": {
+    "test": "tap test/*.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scriptoLLC/das-router.git"
+  },
+  "keywords": [
+    "router"
+  ],
+  "author": "Todd Kennedy <todd@selfassembled.org>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/scriptoLLC/das-router/issues"
+  },
+  "homepage": "https://github.com/scriptoLLC/das-router#readme",
+  "dependencies": {
+    "history": "^4.5.0",
+    "pathname-match": "^1.2.0",
+    "wayfarer": "^6.3.0"
+  }
+}
