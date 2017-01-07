@@ -1,37 +1,53 @@
-const wayfarer = require('wayfarer')
-const match = require('pathname-match')
-const history = require('./history')
+/* global self */
+var wayfarer = require('wayfarer')
+var match = require('pathname-match')
+var loadScript = require('load-script')
+var createBrowserHistory = require('history').createBrowserHistory
 
-let router
+var router
+var root
+var cache = {}
+if (typeof window === 'undefined') {
+  root = self
+} else {
+  root = window
+}
+router = root.__router
 
-function render (route) {
-  router(match(route), route)
+function render (routeObj) {
+  router(match(routeObj.pathname), routeObj)
 }
 
-function loadRoutes (route) {
-  const [, appPath] = match(route).split(',')
-  const bundle = `/${appPath}/bundle.js`
-  const script = document.createElement('script')
-  script.src = bundle
-  script.id = `${appPath}-bundle`
-  script.onload = () => {
-    render(route)
+function loadRoute (defaultParams, routeObj) {
+  var appPath = match(routeObj.pathname)
+  var bundle = appPath + '/bundle.js'
+  if (!cache[bundle]) {
+    loadScript(bundle, function (err) {
+      if (!err) render(routeObj)
+    })
   }
-  document.body.appendChild(script)
 }
 
-function init (defaultRoute) {
-  router = wayfarer(defaultRoute)
-  router.on(defaultRoute, loadRoutes)
-  history.listen(render)
+function lazyRouter (defaultRoute) {
+  if (!router) {
+    if (typeof defaultRoute !== 'string') {
+      throw new Error('You must supply a default route')
+    }
+    var history = createBrowserHistory()
+    history.listen(render)
+
+    router = wayfarer(defaultRoute)
+    router.on(defaultRoute, loadRoute)
+    router.push = function (route, opts) {
+      history.push(route, opts)
+    }
+    router.replace = function (route, opts) {
+      history.replace(route, opts)
+    }
+
+    root.__router = router
+  }
   return router
 }
 
-function start () {
-  if (!router) {
-    throw new Error('Router must be initialized first!')
-  }
-  render(history.getCurrentLocation())
-}
-
-module.exports = {init, start}
+module.exports = lazyRouter

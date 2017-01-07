@@ -1,27 +1,48 @@
 {
-  "name": "das-router",
-  "version": "0.0.0",
-  "description": "a router",
+  "name": "lazy-router",
+  "version": "0.0.1",
+  "description": "a lazy-loading router for client applications",
   "main": "router.js",
   "scripts": {
-    "test": "tap test/*.spec.js"
+    "dep": "dependency-check . && dependency-check . --no-dev --unused",
+    "test": "standard && npm run dep && browserify test/*.spec.js | tape-run",
+    "gen-cover": "browserify -p tape-istanbul/plugin test/*.spec.js | tape-run | tape-istanbul",
+    "cover": "standard && npm run dep && npm run gen-cover && istanbul report"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/scriptoLLC/das-router.git"
+    "url": "git+https://github.com/scriptoLLC/lazy-router.git"
   },
   "keywords": [
-    "router"
+    "router",
+    "history",
+    "client",
+    "client-router",
+    "react",
+    "react-router"
   ],
   "author": "Todd Kennedy <todd@selfassembled.org>",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/scriptoLLC/das-router/issues"
+    "url": "https://github.com/scriptoLLC/lazy-router/issues"
   },
-  "homepage": "https://github.com/scriptoLLC/das-router#readme",
+  "homepage": "https://github.com/scriptoLLC/lazy-router#readme",
   "dependencies": {
     "history": "^4.5.0",
+    "load-script": "^1.0.0",
     "pathname-match": "^1.2.0",
     "wayfarer": "^6.3.0"
+  },
+  "devDependencies": {
+    "browserify": "^13.3.0",
+    "browserify-istanbul": "^2.0.0",
+    "dependency-check": "^2.7.0",
+    "istanbul": "^0.4.5",
+    "standard": "^8.6.0",
+    "tape": "^4.6.3",
+    "tape-istanbul": "^1.0.4",
+    "tape-run": "^2.1.5",
+    "uglifyify": "^3.0.4",
+    "uglifyjs": "^2.4.10"
   }
 }
