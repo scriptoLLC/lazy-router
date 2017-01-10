@@ -6,8 +6,8 @@ var root = require('global')
 var router
 var cache = {}
 
-function render (routeObj) {
-  router(match(routeObj.pathname), routeObj)
+function render (routeObj, opts) {
+  router(match(routeObj.pathname), routeObj, opts)
 }
 
 function loadRoute (defaultParams, routeObj) {
@@ -27,7 +27,7 @@ function lazyRouter (defaultRoute) {
     }
 
     root.onpopstate = function (evt) {
-      render(document.location)
+      render(document.location, evt.state || {})
     }
 
     router = wayfarer(defaultRoute)
@@ -38,7 +38,7 @@ function lazyRouter (defaultRoute) {
       var routeObj = document.createElement('a')
       routeObj.href = route
       root.history.pushState(opts, '', route)
-      render(routeObj)
+      render(routeObj, opts)
     }
 
     router.replace = function (route, opts) {
@@ -46,7 +46,7 @@ function lazyRouter (defaultRoute) {
       var routeObj = document.createElement('a')
       routeObj.href = route
       root.history.replaceState(opts, '', route)
-      render(routeObj)
+      render(routeObj, opts)
     }
 
     root.__router = router
