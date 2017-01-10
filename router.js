@@ -1,18 +1,10 @@
-/* global self */
 var wayfarer = require('wayfarer')
 var match = require('pathname-match')
 var loadScript = require('load-script')
-var createBrowserHistory = require('history').createBrowserHistory
+var root = require('global')
 
 var router
-var root
 var cache = {}
-if (typeof window === 'undefined') {
-  root = self
-} else {
-  root = window
-}
-router = root.__router
 
 function render (routeObj) {
   router(match(routeObj.pathname), routeObj)
@@ -33,16 +25,28 @@ function lazyRouter (defaultRoute) {
     if (typeof defaultRoute !== 'string') {
       throw new Error('You must supply a default route')
     }
-    var history = createBrowserHistory()
-    history.listen(render)
+
+    root.onpopstate = function (evt) {
+      render(document.location)
+    }
 
     router = wayfarer(defaultRoute)
     router.on(defaultRoute, loadRoute)
+
     router.push = function (route, opts) {
-      history.push(route, opts)
+      opts = opts || {}
+      var routeObj = document.createElement('a')
+      routeObj.href = route
+      root.history.pushState(opts, '', route)
+      render(routeObj)
     }
+
     router.replace = function (route, opts) {
-      history.replace(route, opts)
+      opts = opts || {}
+      var routeObj = document.createElement('a')
+      routeObj.href = route
+      root.history.replaceState(opts, '', route)
+      render(routeObj)
     }
 
     root.__router = router

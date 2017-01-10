@@ -5,8 +5,8 @@
   "main": "router.js",
   "scripts": {
     "dep": "dependency-check . && dependency-check . --no-dev --unused",
-    "test": "standard && npm run dep && browserify test/*.spec.js | tape-run",
-    "gen-cover": "browserify -p tape-istanbul/plugin test/*.spec.js | tape-run | tape-istanbul",
+    "test": "standard && npm run dep && node test/harness.js test",
+    "gen-cover": "node test/harness.js cover",
     "cover": "standard && npm run dep && npm run gen-cover && istanbul report"
   },
   "repository": {
@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/scriptoLLC/lazy-router#readme",
   "dependencies": {
-    "history": "^4.5.0",
+    "global": "^4.3.1",
     "load-script": "^1.0.0",
     "pathname-match": "^1.2.0",
     "wayfarer": "^6.3.0"

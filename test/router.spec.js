@@ -13,3 +13,14 @@ test('router', (t) => {
   t.ok(router === router2, 'is singleton')
   t.end()
 })
+
+test('routing', (t) => {
+  const frame = document.createElement('iframe')
+  frame.src = 'http://localhost:8000'
+  document.body.appendChild(frame)
+  window.addEventListener('message', () => {
+    t.ok(true, 'route loaded and fired')
+    document.body.removeChild(frame)
+    t.end()
+  })
+})
