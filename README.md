@@ -1,4 +1,5 @@
 # lazy-router
+[![Build Status](https://travis-ci.org/scriptoLLC/lazy-router.svg?branch=master)](https://travis-ci.org/scriptoLLC/lazy-router)
 
 A client-side router based on [wayfarer](https://github.com/yoshuawyuts/wayfarer)  that allows for lazy-loading of client bundles for routes that might not yet be available.
 
