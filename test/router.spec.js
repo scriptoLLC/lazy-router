@@ -18,9 +18,13 @@ test('routing', (t) => {
   const frame = document.createElement('iframe')
   frame.src = 'http://localhost:8000'
   document.body.appendChild(frame)
-  window.addEventListener('message', () => {
-    t.ok(true, 'route loaded and fired')
-    document.body.removeChild(frame)
-    t.end()
+  window.addEventListener('message', (evt) => {
+    if (evt.data === 'loaded1') {
+      t.ok(true, 'route loaded and fired')
+    } else if (evt.data === 'loaded2') {
+      t.ok(true, 'default route played')
+      document.body.removeChild(frame)
+      t.end()
+    }
   })
 })

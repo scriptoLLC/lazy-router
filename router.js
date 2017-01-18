@@ -5,25 +5,46 @@ var root = require('global')
 
 var router
 var cache = {}
+var dft = function () {}
+
+var bundleResolve = function (routeObj) {
+  var appPath = match(routeObj.pathname)
+  var bundle = appPath + '/bundle.js'
+  return bundle
+}
 
 function render (routeObj, opts) {
   router(match(routeObj.pathname), routeObj, opts)
 }
 
 function loadRoute (defaultParams, routeObj) {
-  var appPath = match(routeObj.pathname)
-  var bundle = appPath + '/bundle.js'
+  var bundle = bundleResolve(routeObj)
   if (!cache[bundle]) {
+    cache[bundle] = true
     loadScript(bundle, function (err) {
-      if (!err) render(routeObj)
+      if (err) {
+        return dft()
+      }
+      render(routeObj)
     })
+  } else {
+    dft()
   }
 }
 
-function lazyRouter (defaultRoute) {
+function lazyRouter (defaultRoute, opts) {
   if (!router) {
+    opts = opts || {}
     if (typeof defaultRoute !== 'string') {
       throw new Error('You must supply a default route')
+    }
+
+    if (typeof opts.defaultAction === 'function') {
+      dft = opts.defaultAction
+    }
+
+    if (typeof opts.resolver === 'function') {
+      bundleResolve = opts.resolver
     }
 
     root.onpopstate = function (evt) {

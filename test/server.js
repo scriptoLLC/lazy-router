@@ -26,7 +26,8 @@ const server = http.createServer((req, res) => {
       .bundle()
       .pipe(res)
   } else {
-    res.end(`error: no handle for ${req.url}`)
+    res.statusCode = 404
+    res.end(`error: no handler for ${req.url}`)
   }
 })
 

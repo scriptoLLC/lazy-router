@@ -3,11 +3,15 @@
 
 A client-side router based on [wayfarer](https://github.com/yoshuawyuts/wayfarer)  that allows for lazy-loading of client bundles for routes that might not yet be available.
 
+_n.b._ despite the use of ES6 syntax in the examples and tests, the router itself is implemented in ES3 (as a CommonJS moduleg.
+
 ## Usage
 main.js:
 ```js
 const lr = require('lazy-router')
-lr('/404') // default route if nothing matches -- this needs to be available on your server!
+const defaultAction = (path, routeObj, state) => render404()
+const resolver = (routeObj) => routeObj.pathname + '/bundle.js'
+lr('/404', {defaultAction, resolver})
 lr.on('/my-route', (pathname, routeObj) => console.log(pathname, routeObj))
 lr.push('/not-loaded-yet')
 ```
@@ -23,11 +27,24 @@ So long as `not-loaded-yet.js` is served from `/not-loaded-yet/not-loaded-yet.bu
 `main.js` receieves a request for `/not-loaded-yet`, it'll load the bundle and then
 trigger the route when the bundle is loaded.
 
+
 ## API
-#### `const lr = lazyRouter(defaultRoute?: string) -> router`
-Create or get the current router instance.  The first time this method is called
-you must supply the `defaultRoute` argument. This argument is ignored in subsequent
-calls and it will return the already-defined router instance
+#### `const lr = lazyRouter(defaultRoute?: string, opts?: {defaultAction?: (pathname: string, Location: object, state: object) -> void, resolver: (Location: object) -> string}) -> router`
+Create or get the current router instance.
+
+The first time this method is called you must supply the `defaultRoute` argument.
+
+You can supply a default renderer (if you know that the function will always be
+available) via the options hash property `defaultAction`. The arguments are the same
+as for a normal route.
+
+You can also override the default bundle resolver by supplying your own.  By default
+`lazy-router` will attempt to find the bundle at: `route.pathname + '/bundle.js'`.
+Your function should be supplied via the `resolver` property and receives the `Location` object
+as it's argument. It should return a string.
+
+All arguments are ignored on subsequent calls, which will return the instantiated
+router.
 
 #### `lr.on(pathname: string, (pathname: string, Location: object, state: object) -> void) -> void`
 Attach a route to the router, and provide a function for calling that route. The
@@ -56,8 +73,6 @@ what you're using for bundling, splitting, etc, you should always get a single
 instance of this router (so long as the code is all running in the same window)
 
 ## TODO
-* User definable resolution for missing bundle
-* More tests
 * Figure out coverage for the iframe
 
 ## License
