@@ -1,9 +1,9 @@
 # lazy-router
 [![Build Status](https://travis-ci.org/scriptoLLC/lazy-router.svg?branch=master)](https://travis-ci.org/scriptoLLC/lazy-router)
 
-A client-side router based on [wayfarer](https://github.com/yoshuawyuts/wayfarer)  that allows for lazy-loading of client bundles for routes that might not yet be available.
+A client-side router based on [wayfarer](https://github.com/yoshuawyuts/wayfarer) that allows for lazy-loading of client bundles for routes that might not yet be available.
 
-_n.b._ despite the use of ES6 syntax in the examples and tests, the router itself is implemented in ES3 (as a CommonJS moduleg.
+_n.b._ despite the use of ES6 syntax in the examples and tests, the router itself is implemented in ES3 (as a CommonJS module).
 
 ## Usage
 main.js:
