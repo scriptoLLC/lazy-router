@@ -1,6 +1,6 @@
 {
   "name": "lazy-router",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "a lazy-loading router for client applications",
   "main": "router.js",
   "scripts": {
