@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "browserify": "^14.4.0",
-    "browserify-istanbul": "^2.0.0",
+    "browserify-istanbul": "^3.0.0",
     "dependency-check": "^2.7.0",
     "istanbul": "^0.4.5",
     "standard": "^10.0.2",
