@@ -38,7 +38,7 @@
     "browserify-istanbul": "^2.0.0",
     "dependency-check": "^2.7.0",
     "istanbul": "^0.4.5",
-    "standard": "^10.0.2",
+    "standard": "^11.0.0",
     "tape": "^4.6.3",
     "tape-istanbul": "^1.0.4",
     "tape-run": "^3.0.0",
